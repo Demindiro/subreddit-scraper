@@ -2,3 +2,4 @@ __pycache__/
 downloads/
 venv/
 config.py
+id_cache.txt
