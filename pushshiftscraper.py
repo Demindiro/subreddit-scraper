@@ -22,6 +22,8 @@ else:
     cache = set()
     cache_file = open('id_cache.txt', 'w')
 
+before = int(open('before_cache', 'r').read()) if isfile('before_cache.txt') else None
+
 
 
 """
@@ -43,8 +45,8 @@ class Submission:
 
 class SubmissionGenerator:
 
-    def __init__(self):
-        self.before = None
+    def __init__(self, before = None):
+        self.before = before
         self._next_batch()
 
     def __iter__(self):
@@ -72,7 +74,9 @@ class SubmissionGenerator:
 Main
 """
 
-for submission in SubmissionGenerator():
+generator = SubmissionGenerator(before=before)
+before = generator.before
+for submission in generator:
 
     if submission.id in cache:
         print('Skipping', submission.id, '(cache)')
@@ -81,7 +85,11 @@ for submission in SubmissionGenerator():
     if submission.selftext != '':
         ext = '.txt'
     else:
-        req = requests.head(submission.url)
+        try:
+            req = requests.head(submission.url)
+        except Exception as ex:
+            print('HEAD request failed:', ex)
+            continue
         ctype = req.headers.get('content-type', '')
         if ctype.startswith('image/'):
             ext = guess_extension(ctype.split(' ', 2)[0])
@@ -132,3 +140,8 @@ for submission in SubmissionGenerator():
         print(submission.id + ' has already been scraped')
 
     print(submission.id, file=cache_file)
+
+    if generator.before != before:
+        with open('before_cache.txt', 'w') as f:
+            f.write(str(before))
+        before = generator.before

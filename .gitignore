@@ -3,3 +3,4 @@ downloads/
 venv/
 config.py
 id_cache.txt
+before_cache.txt
