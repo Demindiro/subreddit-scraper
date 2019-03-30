@@ -49,7 +49,17 @@ while True:
             ctype = req.headers.get('content-type', '')
             if ctype.startswith('image/'):
                 ext = guess_extension(ctype.split(' ', 2)[0])
+                # Really? `image/*`?
+                if ext is None:
+                    print('Extension couldn\'t be guessed (' + ctype + ')')
+                    # I'm done, this will do
+                    # I mean, come on Reddit: https://i.reddituploads.com/9cf2711854b84c0cb5f143f5456ad031?fit=max&h=1536&w=1536&s=7aa0269674cdd9c1170a1320c1997a61
+                    # ^^^ You expect me to guess the extension from that?
+                    # And no, I'm not going to analyze the image itself damnit
+                    ext = submission.url[submission.url.rfind('.'):].replace('/', '_')
+                    print('Guessing ' + ext + ' from URL (' + submission.url + ')')
                 # Goddamnit mimetypes
+                # Yes, .jpe is valid but come on, nobody uses that anymore
                 if ext == '.jpe':
                     ext = '.jpg'
             else:
