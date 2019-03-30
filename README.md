@@ -23,6 +23,8 @@ DOWNLOADS_DIR = 'downloads'
 USER_AGENT = 'Bond, James Bond'
 
 SUBREDDIT = 'ProgrammerHumor'
+BATCH_SIZE = 1
+SORT = 'top'
 
 SCRAPE_DELAY      = 1
 SCRAPE_SKIP_DELAY = 0.25
