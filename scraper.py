@@ -61,7 +61,7 @@ for submission in reddit.subreddit(SUBREDDIT).new(limit=999999999999999999999999
                         print('Download failed: ' + str(ex))
         try:
             symlink(path, pathjoin(DOWNLOADS_DIR, submission.title.replace('/', '_')))
-        except FileExistError as ex:
+        except FileExistsError as ex:
             print('Symlink for ' + submission.id + ' already exists!')
         sleep(SCRAPE_DELAY)
     else:
